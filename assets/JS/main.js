@@ -1,3 +1,6 @@
+let text_tokens = [];
+
+
 window.onload = function() {
     let fileInput = document.getElementById('fileInput');
     let fileDisplayArea = document.getElementById('fileDisplayArea');
@@ -21,13 +24,13 @@ window.onload = function() {
             // dans la zone d'affichage du texte.
             reader.onload = function(e) {
                 fileDisplayArea.innerText = reader.result;
+                                segmentation();
+                document.getElementById("logger").innerHTML = '<span class="infolog">Fichier chargé avec succès, ' + text_tokens.length + ' tokens dans le texte.</span>';
             }
 
             // on lit concrètement le fichier.
             // Cette lecture lancera automatiquement la fonction "onload" juste au-dessus.
-            reader.readAsText(file);    
-
-            document.getElementById("logger").innerHTML = '<span class="infolog">Fichier chargé avec succès</span>';
+            reader.readAsText(file);
         } else { // pas un fichier texte : message d'erreur.
             fileDisplayArea.innerText = "";
             document.getElementById("logger").innerHTML = '<span class="errorlog">Type de fichier non supporté !</span>';
@@ -65,9 +68,66 @@ function segmentation() {
         + "]+" // on ajoute le + au cas où plusieurs délimiteurs sont présents : évite les tokens vides
     );
 
-    let tokens = text.split(regex_delim);
-    tokens = tokens.filter(x => x.trim() != ''); // on s'assure de ne garder que des tokens "non vides"
+        let tokens_tmp = text.split(regex_delim);
+    text_tokens = tokens_tmp.filter(x => x.trim() != ''); // on s'assure de ne garder que des tokens "non vides"
 
     // global_var_tokens = tokens; // décommenter pour vérifier l'état des tokens dans la console développeurs sur le navigateur
-    display.innerHTML = tokens.join(" ");
+    // display.innerHTML = tokens.join(" ");
+}
+
+
+function dictionnaire() {
+    let comptes = new Map();
+    let display = document.getElementById("page-analysis");
+
+    for (let token of text_tokens) {
+        comptes.set(token, (comptes.get(token) ?? 0) + 1);
+    }
+
+    let comptes_liste = Array.from(comptes);
+    comptes_liste = comptes_liste.sort(function(a, b) {
+        // solution attendue
+        return b[1] - a[1]; // tri numérique inversé
+
+        /*
+         * // solution alternative
+         * // on trie sur les comptes en priorité
+         * // puis, pour les comptes identiques, on trie sur la forme
+         * let a_form = a[0];
+         * let a_count = a[1];
+         * let b_form = b[0];
+         * let b_count = b[1];
+         * let comparaison = 0;
+         *
+         * // utiliser +2 et -2 permet de donner plus de poids aux comptes (permet le trie du plus fréquent au moins fréquent)
+         * if (a_count < b_count) {
+         *     comparaison += 2;
+         * } else if (a_count > b_count) {
+         *     comparaison -= 2;
+         * }
+         * // -1 et +1 permettent d'ajuster le tri en cas de comptes égaux, mais ne peut pas inverser l'ordre pour des comptes différents
+         * if (a_form < b_form) {
+         *     comparaison -= 1;
+         * } else if (a_form > b_form) {
+         *     comparaison += 1;
+         * }
+         *
+         * return comparaison;
+         */
+    });
+
+    let table = document.createElement("table");
+    table.style.margin = "auto";
+    let entete = table.appendChild(document.createElement("tr"));
+    entete.innerHTML = "<th>mot</th><th>compte</th>";
+
+    for (let [mot, compte] of comptes_liste) {
+        let ligne_element = table.appendChild(document.createElement("tr"));
+        let cellule_mot = ligne_element.appendChild(document.createElement("td"));
+        let cellule_compte = ligne_element.appendChild(document.createElement("td"));
+        cellule_mot.innerHTML = mot;
+        cellule_compte.innerHTML = compte;
+    }
+
+    display.appendChild(table);
 }

@@ -47,11 +47,10 @@
             <h3>Bonjour.</h3>
             <p>Le bouton <button onclick="javascript:void(0);">Bonjour</button> permet d'afficher un message de bienvenue.</p>
             <h3>Charger un fichier texte.</h3>
-            <p>Pour commencer, il faut donner un fichier texte via le bouton <button onclick="javascript:void(0);">Choose File</button></p>
-            <p>Le texte chargé sera affiché à gauche.</p>
-            <h3>Segmenter le texte chargé.</h3>
-            <p>Ensuite, on clique sur le bouton <button onclick="javascript:void(0);">Segmentation</button> pour afficher le texte segmenté.</p>
-            <p>Le texte segmenté sera affiché à droite.</p>
+            <p>Le texte chargé sera affiché à gauche. Il sera segmenté automatiquement, son nombre de tokens sera alors affiché.</p>
+            <h3>Compter les mots.</h3>
+            <p>Pour avoir le comptage des mots, triés du plus fréquent au moins fréquent, on clique sur le bouton <button onclick="javascript:void(0);">Dictionnaire</button></p>
+            <p>Le tableau sera affiché à droite.</p>
         </div>
     </div>
 
@@ -87,8 +86,8 @@
             <button onclick="alert('Bonjour et bienvenue sur le site !');"><span>Bonjour</span></button>
             <br />
             <br />
-            <button class="submit" onclick="segmentation();"><span>Segmentation</span></button>
-            <button class="submit" onclick="alert('Je ne fais rien, changez-moi !');"><span>action 1</span></button>
+            <!--<button class="submit" onclick="segmentation();"><span>Segmentation</span></button>-->
+            <button class="submit" onclick="dictionnaire();"><span>dictionnaire</span></button>
             <button class="submit" onclick="alert('Je ne fais rien, changez-moi !')"><span>action 2</span></button>
             <button class="submit" onclick="alert('Je ne fais rien, changez-moi !')"><span>action 3</span></button>
             <button class="submit" onclick="alert('Je ne fais rien, changez-moi !')"><span>action 4</span></button>
