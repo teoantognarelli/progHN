@@ -1,5 +1,5 @@
 let text_tokens = [];
-
+let lines = [];
 
 window.onload = function() {
     let fileInput = document.getElementById('fileInput');
@@ -131,3 +131,52 @@ function dictionnaire() {
 
     display.appendChild(table);
 }
+
+function grep(pattern) {
+  const lines = document.getElementById('text-area').value.split('\n');
+  const resultContainer = document.getElementById('result-container');
+  resultContainer.innerHTML = '';
+  lines.forEach((line, i) => {
+    const matches = line.match(new RegExp(pattern, 'g'));
+    if (matches) {
+      const lineElem = document.createElement('div');
+      lineElem.innerText = `Ligne ${i + 1}: ${line}`;
+      resultContainer.appendChild(lineElem);
+      matches.forEach(match => {
+        const start = line.indexOf(match);
+        const end = start + match.length;
+        const coloredLine = line.substring(0, start) + '<span style="color:red;">' + match + '</span>' + line.substring(end);
+        const matchElem = document.createElement('div');
+        matchElem.innerHTML = `    ${coloredLine}`;
+        resultContainer.appendChild(matchElem);
+      });
+    }
+  });
+}
+
+function checkdictionnaireparams() {
+  if (!textLines) {
+    alert("Le fichier n'a pas été chargé. Veuillez charger un fichier avant d'utiliser cette fonctionnalité.");
+    return false;
+  }
+  if (!dictionaire) {
+    alert("Le dictionnaire n'a pas été chargé. Veuillez charger un dictionnaire avant d'utiliser cette fonctionnalité.");
+    return false;
+  }
+  return true;
+}
+
+function checkgrepparams() {
+  if (!textLines) {
+    alert("Le fichier n'a pas été chargé. Veuillez charger un fichier avant d'utiliser cette fonctionnalité.");
+    return false;
+  }
+  if (!grepPole) {
+    alert("Le pôle de recherche n'a pas été défini. Veuillez entrer un pôle de recherche avant d'utiliser cette fonctionnalité.");
+    return false;
+  }
+  return true;
+}
+
+
+
